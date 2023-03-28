@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Check HTTP status
         uses: gerdemann/http-status-code@1.1.1
@@ -28,6 +28,9 @@ jobs:
         continue-on-error: true
         id: cheak_diff
         run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+          git config --global core.autocrlf false
           git branch -a | grep -q "remotes/origin/create-pull-request/cuda" && git fetch origin create-pull-request/cuda && git reset origin/create-pull-request/cuda
           git add .
           git commit -m A
@@ -54,7 +57,7 @@ jobs:
           committer: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
       - name: Upload artifact
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: cuda-toolkit-archive
           path: cuda-toolkit-archive
